@@ -1,10 +1,17 @@
 #RNA-seq analysis using CIRI2 and CIRIquant 
+#CIRI2 installation
+#prerequisites
+perl -v
+bwa
+samtools
+wget https://sourceforge.net/projects/ciri/files/CIRI2/CIRI_v2.0.6.zip/download
+unzip CIRI_v2.0.6.zip
 #index Reference genome
 bwa index -a bwtsw hg19.fa
 # Align reads using BWA-MEM
 # BWA-MEM is recommended by CIRI2 for accurate back-splice junction detection
 bwa mem -T 19 hg19.fa sample_R1.fastq sample_R2.fastq 1> sample.sam 2> sample.log
-# install CIRI2 and run this script for circular rna detection 
+# Run this script for circular rna detection 
 perl CIRI2.pl -I sample.sam -O outfile -F hg19.fa -A hg19.gtf
 #install ciriquant for quantification and differential expression 
 #Install CIRIquant from source code
@@ -20,7 +27,7 @@ python setup.py install
 
 # Manual installation of required pacakges is also supported
 pip install -r requirements.txt
-#A YAML-formated config file is needed for CIRIquant to find software and reference needed
+# A YAML-formated config file is needed for CIRIquant to find software and reference needed
 reference:
   fasta: /home/zhangjy/Data/database/hg19.fa
   gtf: /home/zhangjy/Data/database/gencode.v19.annotation.gtf
@@ -59,20 +66,21 @@ CASE3 ./t3/t3.gtf T 3
 Then, run prep_CIRIquant to summarize the circRNA expression profile in all samples
 #These count matrices (CSV files) can then be imported into R for use by DESeq2 and edgeR (using the DESeqDataSetFromMatrix and DGEList functions, respectively).
 Step2: Prepare StringTie output
-#The output of StringTie should locate under output_dir/gene/prefix_out.gtf. You need to use prepDE.py from stringTie to generate the gene count matrix for normalization.
+# use prepDE.py from stringTie to generate the gene count matrix for normalization.
 CONTROL1 ./c1/gene/c1_out.gtf
 CONTROL2 ./c2/gene/c2_out.gtf
 CONTROL3 ./c3/gene/c3_out.gtf
 CASE1 ./t1/gene/t1_out.gtf
 CASE2 ./t2/gene/t2_out.gtf
 CASE3 ./t3/gene/t3_out.gtf
-#Then, run prepDE.py -i sample_gene.lst and use gene_count_matrix.csv generated under current working directory for further analysis.
-Step3: Differential expression analysis
-For differential analysis using CIRI_DE_replicate, you need to install a R environment and edgeR package from Bioconductor.
+#Then, run prepDE.py -i sample_gene.lst and use gene_count_matrix.csv generated for further analysis.
+Step3: Differential gene expression analysis
+For differential analysis using CIRI_DE_replicate, install  R environment and edgeR package from Bioconductor.
  CIRI_DE_replicate \
           --lib  library_info.csv \
           --bsj  circRNA_bsj.csv \
           --gene gene_count_matrix.csv \
           --out  circRNA_de.tsv \
           --out2 gene_de.tsv
-  
+# got two outputs circRNA_de.tsv and gene_de.tsv which are filtered and use for visualisation and functional enrichment
+
