@@ -44,6 +44,7 @@ systematic transcriptomic investigations.
 
 
 ## Commands and arguments
+present in code.sh
 ------------------------------------
 ##  Downstream Analysis and Visualization
 
@@ -74,20 +75,12 @@ After circRNA quantification using **CIRIquant**, downstream analyses were perfo
 * Candidate selection for ceRNA network construction
 * Disease-specific circRNA biomarker discovery
 
-## Notes
-
-* Raw sequencing data are not shared due to data privacy constraints.
-* This repository contains scripts and processed results for reproducibility.
-
 ## Author
-
 **Jyoti Tiwari**
 MSc Bioinformatics
 Interests: circRNA analysis, RNA-Seq, cancer genomics, multi-omics integration
 
 ## Citation
-
 If you use this workflow, please cite:
-
 * Gao et al., *Bioinformatics* (CIRI2)
 * Zhang et al., *Genome Biology* (CIRIquant)
